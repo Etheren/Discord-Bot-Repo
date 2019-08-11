@@ -6,7 +6,7 @@ TOKEN = discordtoken.TOKEN
 #Destroyed by it being left here.
 
 description = '''Etherbot'''
-bot = commands.Bot(command_prefix='#', description=description)
+bot = commands.Bot(command_prefix=';', description=description)
 
 @bot.event
 async def on_ready():
