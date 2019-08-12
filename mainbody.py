@@ -5,8 +5,9 @@ TOKEN = discordtoken.TOKEN
 #You're not getting the bot token THIS easily. Ive already seen one server get
 #Destroyed by it being left here.
 
-description = '''Etherbot'''
+description = '''AmiBot'''
 bot = commands.Bot(command_prefix=';', description=description)
+bot.load_extension('degencommands')
 
 @bot.event
 async def on_ready():
