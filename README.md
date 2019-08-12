@@ -1,5 +1,5 @@
 # Discord-Bot-Repo
-Code used to run Etherbot, a discord bot.
+Code used to run AmiBot, a discord bot named after my current FFXIV Character, Ami Glissando.
 
 This bot is written in Python, using the Discord.py API to handle calls. With sufficient dependancies fulfilled, this code can be ran on a Raspberry Pi, and was originally intended to do so.
 
