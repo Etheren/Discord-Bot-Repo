@@ -26,5 +26,15 @@ async def hello(ctx):
 async def add(ctx, left : int, right: int):
     """Adds two numbers together."""
     await ctx.send(left + right)
-
+	
+	
+@bot.command()
+async def google(ctx):
+	"""Google Something?"""
+	await ctx.send("www.google.co.uk")
+	
+@bot.command()
+async def test(ctx):
+	await ctx.send("@everyone fuk da popo")
+		
 bot.run(TOKEN)
