@@ -1,4 +1,4 @@
-import discord, discordtoken
+import discord, discordtoken , random
 from discord.ext import commands
 
 TOKEN = discordtoken.TOKEN
@@ -37,5 +37,18 @@ async def google(ctx):
 @bot.command()
 async def test(ctx):
 	await ctx.send("@everyone fuk da popo")
+	
+@bot.command()
+async def randomroll(ctx, left : int, right : int):
+	"""Roll a random number between 1 and 10"""
+	randomoutput = random.randint(left, right)
+	await ctx.send(randomoutput)
+	
+@bot.command()
+async def multimessage(ctx):
+	"""output a multiline message"""
+	await ctx.send("this is a test to see if multi messages can be sent")
+	await ctx.send("if not, whoops")
+	
 		
 bot.run(TOKEN)
