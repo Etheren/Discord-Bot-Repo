@@ -8,6 +8,7 @@ TOKEN = discordtoken.TOKEN
 description = '''AmiBot'''
 bot = commands.Bot(command_prefix=';', description=description)
 bot.load_extension('degencommands')
+bot.load_extension('mapsimulator')
 
 @bot.event
 async def on_ready():
@@ -16,18 +17,15 @@ async def on_ready():
     print(bot.user.id)
     print('------')
 
-
 @bot.command()
 async def hello(ctx):
     """Says world"""
     await ctx.send("world")
 
-
 @bot.command()
 async def add(ctx, left : int, right: int):
     """Adds two numbers together."""
-    await ctx.send(left + right)
-	
+    await ctx.send(left + right)	
 	
 @bot.command()
 async def google(ctx):
