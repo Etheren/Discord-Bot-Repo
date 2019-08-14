@@ -1,4 +1,4 @@
-import discord, discordtoken , random
+import discord, discordtoken , random, time
 from discord.ext import commands
 
 TOKEN = discordtoken.TOKEN
@@ -6,9 +6,9 @@ TOKEN = discordtoken.TOKEN
 #Destroyed by it being left here.
 
 description = '''AmiBot'''
+mapToggle = False
 bot = commands.Bot(command_prefix=';', description=description)
-bot.load_extension('degencommands')
-bot.load_extension('mapsimulator')
+#bot.load_extension('degencommands')
 
 @bot.event
 async def on_ready():
@@ -25,28 +25,37 @@ async def hello(ctx):
 @bot.command()
 async def add(ctx, left : int, right: int):
     """Adds two numbers together."""
-    await ctx.send(left + right)	
-	
+    await ctx.send(left + right)    
+    
 @bot.command()
 async def google(ctx):
-	"""Google Something?"""
-	await ctx.send("www.google.co.uk")
-	
-@bot.command()
-async def test(ctx):
-	await ctx.send("@everyone fuk da popo")
-	
+    """Google Something?"""
+    await ctx.send("https://www.google.co.uk")
+    
 @bot.command()
 async def randomroll(ctx, left : int, right : int):
-	"""Roll a random number between 1 and 10"""
-	randomoutput = random.randint(left, right)
-	await ctx.send(randomoutput)
-	
+    """Roll a random number between 1 and 10"""
+    randomoutput = random.randint(left, right)
+    await ctx.send(randomoutput)
+    
 @bot.command()
 async def multimessage(ctx):
-	"""output a multiline message"""
-	await ctx.send("this is a test to see if multi messages can be sent")
-	await ctx.send("if not, whoops")
-	
-		
+    """output a multiline message"""
+    await ctx.send("this is a test to see if multi messages can be sent")
+    time.sleep(5)
+    await ctx.send("if not, whoops")
+    
+@bot.command()
+async def toggleMap(ctx):
+    """Enable/Disable Map Mode"""
+    global mapToggle
+    if mapToggle == False:
+        mapToggle = True
+        bot.load_extension('mapsimulator')
+        await ctx.send('Map Mode Enabled')
+    elif mapToggle == True:
+        mapToggle = False
+        bot.unload_extension('mapsimulator')
+        await ctx.send('Map Mode Disabled')
+        
 bot.run(TOKEN)
