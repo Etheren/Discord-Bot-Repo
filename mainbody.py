@@ -20,17 +20,12 @@ async def on_ready():
 @bot.command()
 async def hello(ctx):
     """Says world"""
-    await ctx.send("world")
+    await ctx.send("world!")
 
 @bot.command()
 async def add(ctx, left : int, right: int):
     """Adds two numbers together."""
     await ctx.send(left + right)    
-    
-@bot.command()
-async def google(ctx):
-    """Google Something?"""
-    await ctx.send("https://www.google.co.uk")
     
 @bot.command()
 async def randomroll(ctx, left : int, right : int):
