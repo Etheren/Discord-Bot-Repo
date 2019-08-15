@@ -14,10 +14,13 @@ class MapMode(commands.Cog):
         self.ismap = False
         self.floor = 0
         self.isgambling = False
-        self.gamblechance = 10
+        self.gamblechance = 20
         self.gamblecount = 1
         self.gambleValue = 1
-        self.doorroute = [0,0,0,0,0,0]
+        self.doorroute = [0,0,0,0,0,0] 
+        self.lpdoor = False
+        self.rpdoor = False
+        self.pdoorchance = 10
         
     def resetMap():
         self.ismap = False
@@ -70,9 +73,10 @@ class MapMode(commands.Cog):
     async def doorRight(self, ctx):
         """Picks the door on the right"""
         await ctx.send('You picked the door on the right! Will it open?...')
-        if self.doorroute[self.floor] == 1:
+        if self.doorroute[self.floor] == 1 or self.rpdoor == True:
             await ctx.send(file=discord.File('Success.gif'))
             self.floor += 1
+            self.rpdoor = False
             time.sleep(5)
             await ctx.send('Success! You and your party move to the next chamber!')
         elif self.doorroute[self.floor] == 0:
@@ -82,6 +86,8 @@ class MapMode(commands.Cog):
             self.ismap = False
             self.floor = 0
             self.isgambling = False
+            self.lpdoor = False
+            self.rpdoor = False
             self.doorroute = [0,0,0,0,0,0]
             await self.bot.change_presence(status=discord.Status.online)
         if self.floor == 6:
@@ -89,10 +95,22 @@ class MapMode(commands.Cog):
             self.ismap = False
             self.floor = 0
             self.isgambling = False
+            self.lpdoor = False
+            self.rpdoor = False
             self.doorroute = [0,0,0,0,0,0]
             await self.bot.change_presence(status=discord.Status.online)
         elif self.floor >0:
             await ctx.send('You and your party are in Chamber {0}.  Do you want to pick the door on the left or the right?'.format(self.floor+1))
+            pdoorrandom = random.randint(1, 100)
+            if pdoorrandom <= self.pdoorchance and self.floor <= 4:
+                temp = random.randint(0,1)
+                if temp == 0:
+                    self.lpdoor = True
+                    await ctx.send('The door on the left begins to glow brightly after you defeated the enemies.')
+                elif temp == 1:
+                    self.rpdoor = True
+                    await ctx.send('The door on the right begins to glow brightly after you defeated the enemies.')
+                
         #add weighting
 
     @commands.command()
