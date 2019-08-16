@@ -3,7 +3,7 @@ from discord.ext import commands
 
 gamestatus = discord.Game('A Map Simulation')
 
-debug = True
+
 
 class MapMode(commands.Cog):
 
@@ -20,6 +20,7 @@ class MapMode(commands.Cog):
         self.lpdoor = False
         self.rpdoor = False
         self.pdoorchance = 10
+        self.debug = False
         
     @commands.command()
     async def beginMap(self, ctx):
@@ -58,7 +59,7 @@ class MapMode(commands.Cog):
             elif self.doorroute[self.floor] == 1:
                 await ctx.send(file=discord.File('Failure.gif'))
                 time.sleep(5)
-                await ctx.send('Failure! You and your party have been kicked from the dungeon!')
+                await ctx.send('Failure! You and your party have been kicked from the dungeon! GAME OVER!')
                 self.ismap = False
                 self.floor = 0
                 self.isgambling = False
@@ -117,7 +118,7 @@ class MapMode(commands.Cog):
             elif self.doorroute[self.floor] == 0:
                 await ctx.send(file=discord.File('Failure.gif'))
                 time.sleep(5)
-                await ctx.send('Failure! You and your party have been kicked from the dungeon!')
+                await ctx.send('Failure! You and your party have been kicked from the dungeon! GAME OVER!')
                 self.ismap = False
                 self.floor = 0
                 self.isgambling = False
@@ -221,57 +222,72 @@ class MapMode(commands.Cog):
     @commands.command()
     async def debugoutput(self, ctx):
         """output class variables"""
-        if debug == True:
+        if self.debug == True or str(ctx.message.author) == "Etheren#6893":
             await ctx.send('ismap is currently {0}'.format(self.ismap))
             await ctx.send('you are on floor {0}'.format(self.floor + 1))
-        elif debug == False:
-            await ctx.send('Debugging is not enabled')
+        elif self.debug == False:
+            await ctx.send('Debugging is not enabled, nor you are my creator.')
         
     @commands.command()
     async def debugDoors(self, ctx):
         """Show the Door Direction Array"""
-        if debug == True:
+        if self.debug == True  or str(ctx.message.author) == "Etheren#6893":
             await ctx.send(self.doorroute)
-        elif debug == False:
-            await ctx.send('Debugging is not enabled')
+        elif self.debug == False:
+            await ctx.send('Debugging is not enabled, nor you are my creator.')
             
     @commands.command()
     async def procParty(self,ctx):
         """Guarantee the next chamber has a Party Door"""
-        if debug == True:
+        if self.debug == True  or str(ctx.message.author) == "Etheren#6893":
             self.pdoorchance = 100
             await ctx.send('A Party door is now guaranteed to spawn in the next chamber')
-        if debug == False:
-            await ctx.send('Debugging is not enabled')
+        if self.debug == False:
+            await ctx.send('Debugging is not enabled, nor you are my creator.')
 
     @commands.command()
     async def procGamble(self,ctx):
         """Guarantee the next chest gives a gamble opportunity"""
-        if debug == True:
+        if self.debug == True  or str(ctx.message.author) == "Etheren#6893":
             self.gamblechance = 100
             await ctx.send('The next chest will guarantee a gamble minigame')
-        elif debug == False:
-            await ctx.send('Debugging is not enabled')
+        elif self.debug == False:
+            await ctx.send('Debugging is not enabled, nor you are my creator.')
             
     @commands.command()
     async def gambleDebug(self,ctx):
-        if debug == True:
+        """output debug info relating to High/Low"""
+        if self.debug == True  or str(ctx.message.author) == "Etheren#6893":
             await ctx.send('isgambling is currently {0}'.format(self.isgambling))
             await ctx.send('gamblechance is currently {0}'.format(self.gamblechance))
             await ctx.send('gamblecount is currently {0}'.format(self.gamblecount))
             await ctx.send('current number to guess is {0}'.format(self.gambleValue))
             await ctx.send('previous value was {0}'.format(self.gamblePrev))
-        elif debug == False:
-            await ctx.send('Debugging is not enabled')
+        elif self.debug == False:
+            await ctx.send('Debugging is not enabled, nor you are my creator.')
     
     @commands.command()
     async def partyDebug(self,ctx):
-        if debug == True:
+        """output debug info relating to the party door"""
+        if self.debug == True or str(ctx.message.author) == "Etheren#6893":
             await ctx.send('Left Party Door is currently {0}'.format(self.lpdoor))
             await ctx.send('Right Party Door is currently {0}'.format(self.rpdoor))
             await ctx.send('pdoor chance is {0}'.format(self.pdoorchance))  
-        elif debug == False:
-            await ctx.send('Debugging is not enabled')
+        elif self.debug == False:
+            await ctx.send('Debugging is not enabled, nor you are my creator.')
         
+    @commands.command()
+    async def toggleDebug(self,ctx):
+        """Toggle Debugging"""
+        if str(ctx.message.author) == "Etheren#6893":
+            if self.debug == False:
+                self.debug = True
+                await ctx.send('Debugging Enabled.')
+            elif self.debug == True:
+                self.debug = False
+                await ctx.send('Debugging Disabled.')
+        else:
+            await ctx.send('You do not have permission to toggle that.')
+            
 def setup(bot):
 	bot.add_cog(MapMode(bot))

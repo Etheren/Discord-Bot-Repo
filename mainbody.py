@@ -1,7 +1,7 @@
 import discord, discordtoken , random, time
 from discord.ext import commands
 
-TOKEN = discordtoken.TOKEN
+TOKEN = discordtoken.TOKENONE
 #You're not getting the bot token THIS easily. Ive already seen one server get
 #Destroyed by it being left here.
 
@@ -52,5 +52,16 @@ async def toggleMap(ctx):
         mapToggle = False
         bot.unload_extension('mapsimulator')
         await ctx.send('Map Mode Disabled')
+        
+@bot.command()
+async def shutdownBot(ctx):
+    """Shut the bot down"""
+    if str(ctx.message.author) == "Etheren#6893":
+        await ctx.send('Shutting the bot down.')
+        await bot.close()
+    else: 
+        await ctx.send('Only Etheren#6893 can shut the bot down.')
+    
+    
         
 bot.run(TOKEN)
