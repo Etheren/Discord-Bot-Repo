@@ -1,7 +1,7 @@
 import discord, discordtoken , random, time
 from discord.ext import commands
 
-TOKEN = discordtoken.TOKENONE
+TOKEN = discordtoken.TOKENTWO
 #You're not getting the bot token THIS easily. Ive already seen one server get
 #Destroyed by it being left here.
 

@@ -176,6 +176,7 @@ class MapMode(commands.Cog):
             elif self.gambleValue < self.gamblePrev:
                 await ctx.send('Incorrect! The chest now remains forever locked. You might as well move onto the next chamber...')
                 self.isgambling = False
+                await ctx.send('You and your party are now in Chamber {0}.  Do you want to pick the door on the left or the right?'.format(self.floor+1))
         elif self.isgambling == False:
             await ctx.send('There is no chest that requires gambling...')
     
@@ -203,6 +204,7 @@ class MapMode(commands.Cog):
             elif self.gambleValue > self.gamblePrev:
                 await ctx.send('Incorrect! The chest now remains forever locked. You might as well move onto the next chamber...')
                 self.isgambling = False
+                await ctx.send('You and your party are now in Chamber {0}.  Do you want to pick the door on the left or the right?'.format(self.floor+1))
         elif self.isgambling == False:
             await ctx.send('There is no chest that requires gambling...')
 
@@ -242,7 +244,7 @@ class MapMode(commands.Cog):
         if self.debug == True  or str(ctx.message.author) == "Etheren#6893":
             self.pdoorchance = 100
             await ctx.send('A Party door is now guaranteed to spawn in the next chamber')
-        if self.debug == False:
+        elif self.debug == False:
             await ctx.send('Debugging is not enabled, nor you are my creator.')
 
     @commands.command()
