@@ -1,7 +1,7 @@
 import discord, discordtoken , random, time
 from discord.ext import commands
 
-TOKEN = discordtoken.TOKENTWO
+TOKEN = discordtoken.TOKENONE
 #You're not getting the bot token THIS easily. Ive already seen one server get
 #Destroyed by it being left here.
 
@@ -32,13 +32,6 @@ async def randomroll(ctx, left : int, right : int):
     """Roll a random number between 1 and 10"""
     randomoutput = random.randint(left, right)
     await ctx.send(randomoutput)
-    
-@bot.command()
-async def multimessage(ctx):
-    """output a multiline message"""
-    await ctx.send("this is a test to see if multi messages can be sent")
-    time.sleep(5)
-    await ctx.send("if not, whoops")
     
 @bot.command()
 async def toggleMap(ctx):

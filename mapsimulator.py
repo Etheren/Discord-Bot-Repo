@@ -35,7 +35,7 @@ class MapMode(commands.Cog):
             await ctx.send('A Map Sim is already in progress!')
             
     @commands.command()
-    async def doorLeft(self, ctx):
+    async def left(self, ctx):
         """ Picks the door on the left"""
         if self.isgambling == False:
             await ctx.send('You picked the door on the left! Will it open?...')
@@ -94,7 +94,7 @@ class MapMode(commands.Cog):
             await ctx.send('A chest is currently being gambled on, so no opening doors for now...')
     
     @commands.command()    
-    async def doorRight(self, ctx):
+    async def right(self, ctx):
         """Picks the door on the right"""
         if self.isgambling == False:
             await ctx.send('You picked the door on the right! Will it open?...')
@@ -153,7 +153,7 @@ class MapMode(commands.Cog):
             await ctx.send('A chest is currently being gambled on, so no opening doors for now...')
 
     @commands.command()
-    async def pickHigher(self, ctx):
+    async def higher(self, ctx):
         """When Gambling, guess higher"""
         if self.isgambling == True:
             await ctx.send('You picked Higher. The 2nd card spins around, and reveals a...')
@@ -172,16 +172,18 @@ class MapMode(commands.Cog):
                 elif self.gamblecount == 5:
                     await ctx.send('Correct! The chest now has x{0} of the original loot, and has opened up!'.format(self.gamblecount))
                     self.isgambling = False
+                    self.gamblecount = 1
                     await ctx.send('You and your party are now in Chamber {0}.  Do you want to pick the door on the left or the right?'.format(self.floor+1))
             elif self.gambleValue < self.gamblePrev:
                 await ctx.send('Incorrect! The chest now remains forever locked. You might as well move onto the next chamber...')
                 self.isgambling = False
+                self.gamblecount = 1
                 await ctx.send('You and your party are now in Chamber {0}.  Do you want to pick the door on the left or the right?'.format(self.floor+1))
         elif self.isgambling == False:
             await ctx.send('There is no chest that requires gambling...')
     
     @commands.command()
-    async def pickLower(self, ctx):
+    async def lower(self, ctx):
         """When Gambling, guess lower"""
         if self.isgambling == True:
             await ctx.send('You picked Lower. The 2nd card spins around, and reveals a...')
@@ -200,11 +202,24 @@ class MapMode(commands.Cog):
                 elif self.gamblecount == 5:
                     await ctx.send('Correct! The chest now has x{0} of the original loot, and has opened up!'.format(self.gamblecount))
                     self.isgambling = False
+                    self.gamblecount = 1
                     await ctx.send('You and your party are now in Chamber {0}.  Do you want to pick the door on the left or the right?'.format(self.floor+1))
             elif self.gambleValue > self.gamblePrev:
                 await ctx.send('Incorrect! The chest now remains forever locked. You might as well move onto the next chamber...')
                 self.isgambling = False
+                self.gamblecount = 1
                 await ctx.send('You and your party are now in Chamber {0}.  Do you want to pick the door on the left or the right?'.format(self.floor+1))
+        elif self.isgambling == False:
+            await ctx.send('There is no chest that requires gambling...')
+      
+    
+      
+    @commands.command()
+    async def stopGamble(self, ctx):
+        if self.isgambling == True:
+            await ctx.send('You have decided to stop gambling, and your loot multiplier was x{0}.'.format(self.gamblecount))
+            self.gamblecount = 1
+            await ctx.send('You and your party are now in Chamber {0}.  Do you want to pick the door on the left or the right?'.format(self.floor+1))
         elif self.isgambling == False:
             await ctx.send('There is no chest that requires gambling...')
 
