@@ -12,7 +12,7 @@ class MapMode(commands.Cog):
         self.ismap = False
         self.floor = 0
         self.isgambling = False
-        self.gamblechance = 20
+        self.gamblechance = 10
         self.gamblecount = 1
         self.gambleValue = 1
         self.gamblePrev = 0
@@ -39,7 +39,7 @@ class MapMode(commands.Cog):
         """ Picks the door on the left"""
         if self.isgambling == False:
             await ctx.send('You picked the door on the left! Will it open?...')
-            if self.doorroute[self.floor] == 0 or self.lpdoor == True:
+            if self.doorroute[self.floor] == 0:
                 await ctx.send(file=discord.File('Success.gif'))
                 self.floor += 1
                 self.lpdoor = False
@@ -48,7 +48,7 @@ class MapMode(commands.Cog):
                 gambleCheck = random.randint(1,100)
                 if gambleCheck <= self.gamblechance:
                     await ctx.send('Upon defeating the enemies and soon as you touch the chest, 2 cards appear. Its time to play Higher and Lower!')
-                    self.gamblechance = 20
+                    self.gamblechance = 10
                     time.sleep(2)
                     self.isgambling = True
                     self.gambleValue = random.randint(1,10)
@@ -64,6 +64,7 @@ class MapMode(commands.Cog):
                 self.floor = 0
                 self.isgambling = False
                 self.pdoorchance = 10
+                self.gamblechance = 10
                 self.lpdoor = False
                 self.rpdoor = False
                 self.doorroute = [0,0,0,0,0,0]
@@ -74,6 +75,7 @@ class MapMode(commands.Cog):
                 self.floor = 0
                 self.isgambling = False
                 self.pdoorchance = 10
+                self.gamblechance = 10
                 self.lpdoor = False
                 self.rpdoor = False
                 self.doorroute = [0,0,0,0,0,0]
@@ -83,11 +85,10 @@ class MapMode(commands.Cog):
                 pdoorrandom = random.randint(1, 100)
                 if pdoorrandom <= self.pdoorchance and self.floor <= 4:
                     self.pdoorchance = 10
-                    temp = random.randint(0,1)
-                    if temp == 0:
+                    if self.doorroute[self.floor] == 0:
                         self.lpdoor = True
                         await ctx.send('The door on the left begins to glow brightly after you defeated the enemies.')
-                    elif temp == 1:
+                    elif self.doorroute[self.floor] == 1:
                         self.rpdoor = True
                         await ctx.send('The door on the right begins to glow brightly after you defeated the enemies.')
         elif self.isgambling == True:
@@ -98,7 +99,7 @@ class MapMode(commands.Cog):
         """Picks the door on the right"""
         if self.isgambling == False:
             await ctx.send('You picked the door on the right! Will it open?...')
-            if self.doorroute[self.floor] == 1 or self.rpdoor == True:
+            if self.doorroute[self.floor] == 1:
                 await ctx.send(file=discord.File('Success.gif'))
                 self.floor += 1
                 self.rpdoor = False
@@ -107,7 +108,7 @@ class MapMode(commands.Cog):
                 gambleCheck = random.randint(1,100)
                 if gambleCheck <= self.gamblechance:
                     await ctx.send('Upon defeating the enemies and soon as you touch the chest, 2 cards appear. Its time to play Higher and Lower!')
-                    self.gamblechance = 20
+                    self.gamblechance = 10
                     time.sleep(2)
                     self.isgambling = True
                     self.gambleValue = random.randint(1,10)
@@ -123,6 +124,7 @@ class MapMode(commands.Cog):
                 self.floor = 0
                 self.isgambling = False
                 self.pdoorchance = 10
+                self.gamblechance = 10
                 self.lpdoor = False
                 self.rpdoor = False
                 self.doorroute = [0,0,0,0,0,0]
@@ -133,6 +135,7 @@ class MapMode(commands.Cog):
                 self.floor = 0
                 self.isgambling = False
                 self.pdoorchance = 10
+                self.gamblechance = 10
                 self.lpdoor = False
                 self.rpdoor = False
                 self.doorroute = [0,0,0,0,0,0]
@@ -143,10 +146,10 @@ class MapMode(commands.Cog):
                 if pdoorrandom <= self.pdoorchance and self.floor <= 4:
                     self.pdoorchance = 10
                     temp = random.randint(0,1)
-                    if temp == 0:
+                    if self.doorroute[self.floor] == 0:
                         self.lpdoor = True
                         await ctx.send('The door on the left begins to glow brightly after you defeated the enemies.')
-                    elif temp == 1:
+                    elif self.doorroute[self.floor] == 1:
                         self.rpdoor = True
                         await ctx.send('The door on the right begins to glow brightly after you defeated the enemies.')
         elif self.isgambling == True:
@@ -173,12 +176,54 @@ class MapMode(commands.Cog):
                     await ctx.send('Correct! The chest now has x{0} of the original loot, and has opened up!'.format(self.gamblecount))
                     self.isgambling = False
                     self.gamblecount = 1
-                    await ctx.send('You and your party are now in Chamber {0}.  Do you want to pick the door on the left or the right?'.format(self.floor+1))
+                    if self.floor == 6:
+                        await ctx.send('You are in the final chamber too! Brilliant way to end it!')
+                        self.ismap = False
+                        self.floor = 0
+                        self.isgambling = False
+                        self.pdoorchance = 10
+                        self.gamblechance = 10
+                        self.lpdoor = False
+                        self.rpdoor = False
+                        self.doorroute = [0,0,0,0,0,0]
+                        await self.bot.change_presence(status=discord.Status.online)
+                    elif self.floor <= 5:
+                        await ctx.send('You and your party are now in Chamber {0}.  Do you want to pick the door on the left or the right?'.format(self.floor+1))
+                        pdoorrandom = random.randint(1, 100)
+                        if pdoorrandom <= self.pdoorchance and self.floor <= 4:
+                            self.pdoorchance = 10
+                            if self.doorroute[self.floor] == 0:
+                                self.lpdoor = True
+                                await ctx.send('The door on the left begins to glow brightly after you stopped gambling.')
+                            elif self.doorroute[self.floor] == 1:
+                                self.rpdoor = True
+                                await ctx.send('The door on the right begins to glow brightly after you stopped gambling.')
             elif self.gambleValue < self.gamblePrev:
                 await ctx.send('Incorrect! The chest now remains forever locked. You might as well move onto the next chamber...')
                 self.isgambling = False
                 self.gamblecount = 1
-                await ctx.send('You and your party are now in Chamber {0}.  Do you want to pick the door on the left or the right?'.format(self.floor+1))
+                if self.floor == 6:
+                    await ctx.send('But wait, this is the last chamber. Sad way to end it...')
+                    self.ismap = False
+                    self.floor = 0
+                    self.isgambling = False
+                    self.pdoorchance = 10
+                    self.gamblechance = 10
+                    self.lpdoor = False
+                    self.rpdoor = False
+                    self.doorroute = [0,0,0,0,0,0]
+                    await self.bot.change_presence(status=discord.Status.online)
+                elif self.floor <= 5:    
+                    await ctx.send('You and your party are now in Chamber {0}.  Do you want to pick the door on the left or the right?'.format(self.floor+1))
+                    pdoorrandom = random.randint(1, 100)
+                    if pdoorrandom <= self.pdoorchance and self.floor <= 4:
+                        self.pdoorchance = 10
+                        if self.doorroute[self.floor] == 0:
+                            self.lpdoor = True
+                            await ctx.send('The door on the left begins to glow brightly after you stopped gambling.')
+                        elif self.doorroute[self.floor] == 1:
+                            self.rpdoor = True
+                            await ctx.send('The door on the right begins to glow brightly after you stopped gambling.')
         elif self.isgambling == False:
             await ctx.send('There is no chest that requires gambling...')
     
@@ -203,23 +248,85 @@ class MapMode(commands.Cog):
                     await ctx.send('Correct! The chest now has x{0} of the original loot, and has opened up!'.format(self.gamblecount))
                     self.isgambling = False
                     self.gamblecount = 1
-                    await ctx.send('You and your party are now in Chamber {0}.  Do you want to pick the door on the left or the right?'.format(self.floor+1))
+                    if self.floor == 6:
+                        await ctx.send('You are in the final chamber too! Brilliant way to end it!')
+                        self.ismap = False
+                        self.floor = 0
+                        self.isgambling = False
+                        self.pdoorchance = 10
+                        self.gamblechance = 10
+                        self.lpdoor = False
+                        self.rpdoor = False
+                        self.doorroute = [0,0,0,0,0,0]
+                        await self.bot.change_presence(status=discord.Status.online)
+                    elif self.floor <= 5:
+                        await ctx.send('You and your party are now in Chamber {0}.  Do you want to pick the door on the left or the right?'.format(self.floor+1))
+                        pdoorrandom = random.randint(1, 100)
+                        if pdoorrandom <= self.pdoorchance and self.floor <= 4:
+                            self.pdoorchance = 10
+                            if self.doorroute[self.floor] == 0:
+                                self.lpdoor = True
+                                await ctx.send('The door on the left begins to glow brightly after you stopped gambling.')
+                            elif self.doorroute[self.floor] == 1:
+                                self.rpdoor = True
+                                await ctx.send('The door on the right begins to glow brightly after you stopped gambling.')
             elif self.gambleValue > self.gamblePrev:
                 await ctx.send('Incorrect! The chest now remains forever locked. You might as well move onto the next chamber...')
                 self.isgambling = False
                 self.gamblecount = 1
-                await ctx.send('You and your party are now in Chamber {0}.  Do you want to pick the door on the left or the right?'.format(self.floor+1))
+                if self.floor == 6:
+                    await ctx.send('But wait, this is the last chamber. Sad way to end it...')
+                    self.ismap = False
+                    self.floor = 0
+                    self.isgambling = False
+                    self.pdoorchance = 10
+                    self.gamblechance = 10
+                    self.lpdoor = False
+                    self.rpdoor = False
+                    self.doorroute = [0,0,0,0,0,0]
+                    await self.bot.change_presence(status=discord.Status.online)
+                elif self.floor <= 5:    
+                    await ctx.send('You and your party are now in Chamber {0}.  Do you want to pick the door on the left or the right?'.format(self.floor+1))
+                    pdoorrandom = random.randint(1, 100)
+                    if pdoorrandom <= self.pdoorchance and self.floor <= 4:
+                        self.pdoorchance = 10
+                        if self.doorroute[self.floor] == 0:
+                            self.lpdoor = True
+                            await ctx.send('The door on the left begins to glow brightly after you stopped gambling.')
+                        elif self.doorroute[self.floor] == 1:
+                            self.rpdoor = True
+                            await ctx.send('The door on the right begins to glow brightly after you stopped gambling.')
         elif self.isgambling == False:
             await ctx.send('There is no chest that requires gambling...')
-      
-    
       
     @commands.command()
     async def stopGamble(self, ctx):
         if self.isgambling == True:
             await ctx.send('You have decided to stop gambling, and your loot multiplier was x{0}.'.format(self.gamblecount))
+            self.isgambling = False
             self.gamblecount = 1
-            await ctx.send('You and your party are now in Chamber {0}.  Do you want to pick the door on the left or the right?'.format(self.floor+1))
+            if self.floor == 6:
+                await ctx.send('This is the final chamber. Congratulations on getting to the end!')
+                self.ismap = False
+                self.floor = 0
+                self.isgambling = False
+                self.pdoorchance = 10
+                self.gamblechance = 10
+                self.lpdoor = False
+                self.rpdoor = False
+                self.doorroute = [0,0,0,0,0,0]
+                await self.bot.change_presence(status=discord.Status.online)
+            elif self.floor <= 5:
+                await ctx.send('You and your party are now in Chamber {0}.  Do you want to pick the door on the left or the right?'.format(self.floor+1))
+                pdoorrandom = random.randint(1, 100)
+                if pdoorrandom <= self.pdoorchance and self.floor <= 4:
+                    self.pdoorchance = 10
+                    if self.doorroute[self.floor] == 0:
+                        self.lpdoor = True
+                        await ctx.send('The door on the left begins to glow brightly after you stopped gambling.')
+                    elif self.doorroute[self.floor] == 1:
+                        self.rpdoor = True
+                        await ctx.send('The door on the right begins to glow brightly after you stopped gambling.')
         elif self.isgambling == False:
             await ctx.send('There is no chest that requires gambling...')
 
@@ -231,6 +338,7 @@ class MapMode(commands.Cog):
         self.floor = 0
         self.isgambling = False
         self.pdoorchance = 10
+        self.gamblechance = 10
         self.lpdoor = False
         self.rpdoor = False
         self.doorroute = [0,0,0,0,0,0]

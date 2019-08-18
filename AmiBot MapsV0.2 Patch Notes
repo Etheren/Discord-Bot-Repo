@@ -1,0 +1,25 @@
+MAJOR:-
+
+"stopGambling" has been added as a command for Higher/Lower. You can use this instead of continuing and taking home what you have earned.
+
+The following commands have had their name changed:
+    doorLeft -> left
+    doorRight -> right
+    pickHigher -> higher
+    pickLower -> lower
+Their functionality remains the same.
+
+Party Door functionality has changed. It will now point to the correct door, instead of generating a correct one from thin air. 
+Every floor is now guaranteed to have 1 correct and 1 incorrect door.
+
+Party Doors can now spawn after a Higher/Lower minigame, regardless of the minigame result.  
+
+
+MINOR:-
+
+New output strings can output if the player gets to play Higher/Lower in the final chamber.
+
+
+BALANCING :-
+
+Higher/Lower chance of spawning has been decreased from 20% to 10%
