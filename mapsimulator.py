@@ -145,7 +145,6 @@ class MapMode(commands.Cog):
                 pdoorrandom = random.randint(1, 100)
                 if pdoorrandom <= self.pdoorchance and self.floor <= 4:
                     self.pdoorchance = 10
-                    temp = random.randint(0,1)
                     if self.doorroute[self.floor] == 0:
                         self.lpdoor = True
                         await ctx.send('The door on the left begins to glow brightly after you defeated the enemies.')

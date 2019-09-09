@@ -6,9 +6,14 @@ TOKEN = discordtoken.TOKENONE
 #Destroyed by it being left here.
 
 description = '''AmiBot'''
-mapToggle = False
+mapToggle = True
+voiceToggle = False
 bot = commands.Bot(command_prefix=';', description=description)
+bot.load_extension('mapsimulator')
 #bot.load_extension('degencommands')
+
+if not discord.opus.is_loaded():
+    discord.opus.load_opus('opus')
 
 @bot.event
 async def on_ready():
@@ -45,6 +50,19 @@ async def toggleMap(ctx):
         mapToggle = False
         bot.unload_extension('mapsimulator')
         await ctx.send('Map Mode Disabled')
+
+@bot.command()
+async def toggleVoice(ctx):
+    """Enable/Disable Voice Mode"""
+    global voiceToggle
+    if voiceToggle == False:
+        voiceToggle = True
+        bot.load_extension('voicestuff')
+        await ctx.send('Voice Enabled')
+    elif voiceToggle == True:
+        voiceToggle = False
+        bot.unload_extension('voicestuff')
+        await ctx.send('Voice Disabled')
         
 @bot.command()
 async def shutdownBot(ctx):
