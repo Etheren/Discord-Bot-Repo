@@ -6,10 +6,10 @@ TOKEN = discordtoken.TOKENONE
 #Destroyed by it being left here.
 
 description = '''AmiBot'''
-mapToggle = True
+mapToggle = False
 voiceToggle = False
 bot = commands.Bot(command_prefix=';', description=description)
-bot.load_extension('mapsimulator')
+#bot.load_extension('mapsimulator')
 #bot.load_extension('degencommands')
 
 if not discord.opus.is_loaded():

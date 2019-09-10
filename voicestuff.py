@@ -1,6 +1,8 @@
 import discord
 from discord.ext import commands
 from discord import opus
+from discord.utils import get
+from discord import FFmpegPCMAudio
 
 class voiceCommands(commands.Cog):
 
@@ -16,20 +18,17 @@ class voiceCommands(commands.Cog):
 
     @commands.command()
     async def play(self,ctx):
-    # grab the user who sent the command
-        voice_channel=ctx.message.author.voice.channel
-        # only play music if user is in a voice channel
-        if voice_channel!= None:
-            # create StreamPlayer
-            self.vc= await self.bot.join_voice_channel(voice_channel)
-            player = self.vc.create_ffmpeg_player('vuvuzela.mp3')
-            player.start()
-            while not player.is_done():
-            # disconnect after the player has finished
-                player.stop()
-                await self.vc.disconnect()
+        channel = ctx.message.author.voice.channel
+        if not channel:
+            await ctx.send("You are not connected to a voice channel")
+            return
+        voice = get(self.bot.voice_clients, guild=ctx.guild)
+        if voice and voice.is_connected():
+            await voice.move_to(channel)
         else:
-            await ctx.say('User is not in a channel.')
+            voice = await channel.connect()
+        source = FFmpegPCMAudio('vuvuzela.mp3')
+        player = voice.play(source)
 
 def setup(bot):
     bot.add_cog(voiceCommands(bot))
