@@ -8,7 +8,10 @@ class voiceCommands(commands.Cog):
 
     def __init__(self, bot, opus='opus'):
         self.bot = bot
-        self.vc = None
+        self.voice = None
+        self.player = None
+        self.channel = None
+        self.loop = False
         #discord.opus.load_opus
 
     @commands.command()
@@ -18,17 +21,34 @@ class voiceCommands(commands.Cog):
 
     @commands.command()
     async def play(self,ctx):
-        channel = ctx.message.author.voice.channel
-        if not channel:
+        self.channel = ctx.message.author.voice.channel
+        if not self.channel:
             await ctx.send("You are not connected to a voice channel")
             return
-        voice = get(self.bot.voice_clients, guild=ctx.guild)
-        if voice and voice.is_connected():
-            await voice.move_to(channel)
+        self.voice = get(self.bot.voice_clients, guild=ctx.guild)
+        if self.voice and self.voice.is_connected():
+            await self.voice.move_to(self.channel)
         else:
-            voice = await channel.connect()
+            self.voice = await self.channel.connect()
         source = FFmpegPCMAudio('vuvuzela.mp3')
-        player = voice.play(source)
+        self.player = self.voice.play(source)
+
+    @commands.command()
+    async def pause(self,ctx):
+        self.voice.pause()
+
+    @commands.command()
+    async def resume(self,ctx):
+        self.voice.resume()
+    
+    @commands.command()
+    async def stop(self,ctx):
+        self.voice.stop()
+
+    @commands.command()
+    async def leave(self,ctx):
+        self.voice.stop()
+        await self.voice.disconnect()
 
 def setup(bot):
     bot.add_cog(voiceCommands(bot))
