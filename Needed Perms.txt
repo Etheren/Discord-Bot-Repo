@@ -1,1 +1,4 @@
-Send Files to a specific channel.
+Read from a text channel
+Send Files to a specific text channel.
+Connect to a voice channel
+Speak in a voice channel
