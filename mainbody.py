@@ -9,11 +9,12 @@ counterCheck = 0
 
 description = '''AmiBot'''
 mapToggle = False
-voiceToggle = False
+voiceToggle = True
 bot = commands.Bot(command_prefix=';', description=description)
 client = discord.AutoShardedClient()
 #bot.load_extension('mapsimulator')
 #bot.load_extension('degencommands')
+bot.load_extension('voicestuff')
 
 if not discord.opus.is_loaded():
     discord.opus.load_opus('opus')

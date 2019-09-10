@@ -1,8 +1,10 @@
 import discord
+import sys
 from discord.ext import commands
 from discord import opus
 from discord.utils import get
 from discord import FFmpegPCMAudio
+import youtube_dl
 
 class voiceCommands(commands.Cog):
 
@@ -44,6 +46,19 @@ class voiceCommands(commands.Cog):
     @commands.command()
     async def stop(self,ctx):
         self.voice.stop()
+
+    @commands.command()
+    async def join(self,ctx):
+        self.channel = ctx.message.author.voice.channel
+        if not self.channel:
+            await ctx.send("You are not connected to a voice channel")
+            return
+        self.voice = get(self.bot.voice_clients, guild=ctx.guild)
+        if self.voice and self.voice.is_connected():
+            await self.voice.move_to(self.channel)
+        else:
+            self.voice = await self.channel.connect()
+            await ctx.send("Joining Channel {0}".format(self.channel))
 
     @commands.command()
     async def leave(self,ctx):
