@@ -5,10 +5,13 @@ TOKEN = discordtoken.TOKENONE
 #You're not getting the bot token THIS easily. Ive already seen one server get
 #Destroyed by it being left here.
 
+counterCheck = 0
+
 description = '''AmiBot'''
 mapToggle = False
 voiceToggle = False
 bot = commands.Bot(command_prefix=';', description=description)
+client = discord.AutoShardedClient()
 #bot.load_extension('mapsimulator')
 #bot.load_extension('degencommands')
 
@@ -72,6 +75,12 @@ async def shutdownBot(ctx):
         await bot.close()
     else: 
         await ctx.send('Only Etheren#6893 can shut the bot down.')
+
+@bot.command()
+async def counter(ctx):
+    global counterCheck
+    counterCheck += 1
+    await ctx.send('counter is now {0}'.format(counterCheck))
     
     
         
